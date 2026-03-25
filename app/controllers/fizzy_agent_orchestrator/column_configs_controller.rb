@@ -1,9 +1,8 @@
 module FizzyAgentOrchestrator
   class ColumnConfigsController < ApplicationController
-    include BoardScoped
-
+    before_action :set_board
     before_action :set_column
-    before_action :ensure_permission_to_admin_board
+    before_action :require_admin
 
     def show
       redirect_to edit_board_column_agent_config_path(@board, @column)
@@ -26,8 +25,18 @@ module FizzyAgentOrchestrator
 
     private
 
+    def set_board
+      @board = Current.user.boards.find(params[:board_id])
+    end
+
     def set_column
       @column = @board.columns.find(params[:column_id])
+    end
+
+    def require_admin
+      unless Current.user.can_administer_board?(@board)
+        head :forbidden
+      end
     end
 
     def agent_config_params

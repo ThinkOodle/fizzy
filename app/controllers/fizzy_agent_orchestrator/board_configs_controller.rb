@@ -1,8 +1,7 @@
 module FizzyAgentOrchestrator
   class BoardConfigsController < ApplicationController
-    include BoardScoped
-
-    before_action :ensure_permission_to_admin_board
+    before_action :set_board
+    before_action :require_admin
 
     def show
       redirect_to edit_board_agent_config_path(@board)
@@ -24,6 +23,16 @@ module FizzyAgentOrchestrator
     end
 
     private
+
+    def set_board
+      @board = Current.user.boards.find(params[:board_id])
+    end
+
+    def require_admin
+      unless Current.user.can_administer_board?(@board)
+        head :forbidden
+      end
+    end
 
     def agent_config_params
       params.require(:board_config).permit(:system_prompt, :context_mode)

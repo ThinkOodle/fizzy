@@ -253,6 +253,6 @@ Rails.application.routes.draw do
 
   namespace :admin do
     mount MissionControl::Jobs::Engine, at: "/jobs"
-    mount FizzyAgentOrchestrator::Engine => "/agent_orchestrator"
+    mount FizzyAgentOrchestrator::Engine => "/agent_orchestrator" if defined?(FizzyAgentOrchestrator)
   end
 end

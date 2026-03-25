@@ -17,6 +17,10 @@ ssh:
 proxy:
   ssl: true
   host: fizzy.heyoodle.com
+  healthcheck:
+    path: /up
+    interval: 3
+    timeout: 60
 
 env:
   secret:

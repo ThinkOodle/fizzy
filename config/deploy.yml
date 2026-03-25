@@ -34,7 +34,7 @@ env:
     BASE_URL: https://fizzy.heyoodle.com
     MAILER_FROM_ADDRESS: fizzy@heyoodle.com
     SMTP_ADDRESS: smtp.resend.com
-    SMTP_PORT: "465"
+    SMTP_PORT: "587"
     MULTI_TENANT: false
     SOLID_QUEUE_IN_PUMA: true
     OPENCLAW_RELAY_URL: http://10.0.0.3:18795

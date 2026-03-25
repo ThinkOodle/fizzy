@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
     resource :agent_config,
       only: [ :show, :edit, :update ],
-      controller: "fizzy_agent_orchestrator/board_configs"
+      controller: "agent_orchestrator/board_configs"
 
     resources :cards, only: :create
 
@@ -59,7 +59,7 @@ Rails.application.routes.draw do
     resource :right_position, module: :columns
     resource :agent_config,
       only: [ :show, :edit, :update ],
-      controller: "fizzy_agent_orchestrator/column_configs"
+      controller: "agent_orchestrator/column_configs"
   end
 
   namespace :columns do

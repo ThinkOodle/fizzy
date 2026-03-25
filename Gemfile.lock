@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ThinkOodle/fizzy-agent-orchestrator.git
-  revision: a60cef5282b99aad69eb868fd7b4b3d0f0c20669
+  revision: 29c40bbbbd126a30a12f95450dedb3ec7e0f3e55
   glob: rails-plugin/*.gemspec
   specs:
     fizzy_agent_orchestrator (0.1.0)

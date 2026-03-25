@@ -2,7 +2,7 @@
 
 <% content_for :header do %>
   <div class="header__actions header__actions--start">
-    <%= link_to "← Back to Board Settings", edit_board_path(@board) %>
+    <%= link_to "← Back to Board Settings", main_app.edit_board_path(@board) %>
   </div>
   <h1 class="header__title"><%= @page_title %></h1>
 <% end %>

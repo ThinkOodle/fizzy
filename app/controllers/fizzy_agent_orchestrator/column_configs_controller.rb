@@ -15,7 +15,7 @@ module FizzyAgentOrchestrator
     def update
       @agent_config = FizzyAgentOrchestrator::ColumnConfig.find_or_initialize_by(column_id: @column.id)
       if @agent_config.update(agent_config_params)
-        redirect_to board_path(@board), notice: "Column agent settings saved."
+        redirect_to main_app.board_path(@board), notice: "Column agent settings saved."
       else
         render :edit, status: :unprocessable_entity
       end

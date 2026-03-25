@@ -1,7 +1,8 @@
 module FizzyAgentOrchestrator
   class BoardConfigsController < ApplicationController
-    before_action :set_board
-    before_action :require_admin
+    include BoardScoped
+
+    before_action :ensure_permission_to_admin_board
 
     def show
       redirect_to edit_board_agent_config_path(@board)
@@ -13,7 +14,9 @@ module FizzyAgentOrchestrator
 
     def update
       @agent_config = FizzyAgentOrchestrator::BoardConfig.find_or_initialize_by(board_id: @board.id)
-      if @agent_config.update(agent_config_params)
+      @agent_config.assign_attributes(agent_config_params)
+
+      if @agent_config.save
         redirect_to edit_board_path(@board), notice: "Agent settings saved."
       else
         render :edit, status: :unprocessable_entity
@@ -22,18 +25,8 @@ module FizzyAgentOrchestrator
 
     private
 
-    def set_board
-      @board = Current.user.boards.find(params[:board_id])
-    end
-
-    def require_admin
-      unless Current.user.can_administer_board?(@board)
-        redirect_to @board, alert: "Admins only."
-      end
-    end
-
     def agent_config_params
-      params.require(:board_config).permit(:system_prompt, default_tools: [])
+      params.require(:board_config).permit(:system_prompt, :context_mode)
     end
   end
 end

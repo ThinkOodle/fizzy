@@ -4,7 +4,6 @@
   <div class="header__actions header__actions--start">
     <%= link_to "← Back to Board Settings", edit_board_path(@board) %>
   </div>
-
   <h1 class="header__title"><%= @page_title %></h1>
 <% end %>
 
@@ -13,17 +12,18 @@
     <div class="settings__section">
       <h3 class="settings__section-title">Board Context</h3>
       <p class="settings__section-description">
-        This prompt is included in every agent session on this board. Use it to describe your project, tech stack, conventions, etc.
+        This prompt is the base context for all agent sessions on this board — included automatically on every card, in every column.
+        Use it to describe your project, tech stack, conventions, etc.
+        <br><br>
+        <strong>Note:</strong> "Not Now", "Done", and similar special states use this board context only. Per-column context can be set via each column's settings menu.
       </p>
 
       <%= form_with model: @agent_config,
             url: board_agent_config_path(@board),
             method: :patch do |f| %>
         <% if @agent_config.errors.any? %>
-          <div class="alert">
-            <% @agent_config.errors.full_messages.each do |msg| %>
-              <p><%= msg %></p>
-            <% end %>
+          <div style="color: red; margin-bottom: 0.5rem">
+            <% @agent_config.errors.full_messages.each do |msg| %><p><%= msg %></p><% end %>
           </div>
         <% end %>
 
@@ -38,4 +38,23 @@
       <% end %>
     </div>
   </div>
+
+  <% if @board.columns.any? %>
+    <div class="settings__panel panel shadow">
+      <div class="settings__section">
+        <h3 class="settings__section-title">Column Agent Context</h3>
+        <p class="settings__section-description">
+          Configure per-column agent instructions. Access each column's settings via the column menu on the board.
+        </p>
+        <ul style="margin-top: 0.5rem; list-style: none; padding: 0;">
+          <% @board.columns.sorted.each do |column| %>
+            <li style="padding: 0.25rem 0; display: flex; justify-content: space-between; align-items: center;">
+              <span><%= column.name %></span>
+              <%= link_to "Configure", edit_board_column_agent_config_path(@board, column), class: "btn btn--link txt-small" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
 </section>

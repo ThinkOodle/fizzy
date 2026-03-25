@@ -1,10 +1,12 @@
 module FizzyAgentOrchestrator
   class ColumnConfigsController < ApplicationController
+    include BoardScoped
+
     before_action :set_column
-    before_action :require_admin
+    before_action :ensure_permission_to_admin_board
 
     def show
-      redirect_to edit_column_agent_config_path(@column)
+      redirect_to edit_board_column_agent_config_path(@board, @column)
     end
 
     def edit
@@ -13,8 +15,10 @@ module FizzyAgentOrchestrator
 
     def update
       @agent_config = FizzyAgentOrchestrator::ColumnConfig.find_or_initialize_by(column_id: @column.id)
-      if @agent_config.update(agent_config_params)
-        redirect_back_or_to @column.board, notice: "Column agent settings saved."
+      @agent_config.assign_attributes(agent_config_params)
+
+      if @agent_config.save
+        redirect_to board_path(@board), notice: "Column agent settings saved."
       else
         render :edit, status: :unprocessable_entity
       end
@@ -23,20 +27,11 @@ module FizzyAgentOrchestrator
     private
 
     def set_column
-      @column = Column.find(params[:column_id])
-      unless Current.user.can_administer_board?(@column.board)
-        redirect_to @column.board, alert: "Admins only." and return
-      end
-    end
-
-    def require_admin
-      unless Current.user.can_administer_board?(@column.board)
-        redirect_to @column.board, alert: "Admins only."
-      end
+      @column = @board.columns.find(params[:column_id])
     end
 
     def agent_config_params
-      params.require(:column_config).permit(:system_prompt, :auto_spawn, :timeout_minutes, allowed_tools: [])
+      params.require(:column_config).permit(:system_prompt, :auto_spawn, :timeout_minutes)
     end
   end
 end

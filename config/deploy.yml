@@ -4,6 +4,9 @@ image: thinkoodle/fizzy
 
 #-- About your deployment --#
 
+volumes:
+  - "/data/fizzy/storage:/rails/storage"
+
 servers:
   web:
     - 5.161.50.69

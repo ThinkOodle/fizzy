@@ -1,6 +1,6 @@
 # Name of this app
 service: fizzy
-image: ghcr.io/thinkoodle/fizzy
+image: thinkoodle/fizzy
 
 #-- About your deployment --#
 
@@ -36,16 +36,20 @@ env:
 
 registry:
   server: ghcr.io
-  username: ThinkOodle
+  username: ryanrhughes
   password:
     - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  remote: ssh://root@5.161.50.69
+  cache:
+    type: registry
+    options: mode=max
+    image: thinkoodle/fizzy-build-cache
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
-
-builder:
-  arch: amd64
-  remote: ssh://root@5.161.50.69

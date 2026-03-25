@@ -1,25 +1,20 @@
 # Name of this app
 service: fizzy
-image: fizzy
-
+image: ghcr.io/thinkoodle/fizzy
 
 #-- About your deployment --#
 
-# Where to deploy fizzy
 servers:
   web:
-    - fizzy.example.com  # Set your server name here
+    - 5.161.50.69
 
-# How you connect to your server
 ssh:
-  user: root  # If you use a different username to SSH to your server, specify it here
+  user: root
 
-# Automatic SSL
 proxy:
-  ssl: true                # Set this to false if you *don't* want SSL
-  host: fizzy.example.com  # Set your server name here to use automatic SSL
+  ssl: true
+  host: fizzy.heyoodle.com
 
-# Your application configuration (secrets come from .kamal/secrets).
 env:
   secret:
     - SECRET_KEY_BASE
@@ -27,38 +22,26 @@ env:
     - VAPID_PRIVATE_KEY
     - SMTP_USERNAME
     - SMTP_PASSWORD
+    - OPENCLAW_HOOK_TOKEN
   clear:
-    BASE_URL: https://fizzy.example.com # The public URL of your Fizzy instance
-    MAILER_FROM_ADDRESS: support@example.com # The email "from" address that Fizzy sends email from
-    SMTP_ADDRESS: mail.example.com # The SMTP server you'll use to send email
-    MULTI_TENANT: false # Set to true to allow multiple accounts to sign up
-    SOLID_QUEUE_IN_PUMA: true # Run background jobs in the app container
-
+    BASE_URL: https://fizzy.heyoodle.com
+    MAILER_FROM_ADDRESS: sheldon@heyoodle.com
+    SMTP_ADDRESS: smtp.postmarkapp.com
+    MULTI_TENANT: false
+    SOLID_QUEUE_IN_PUMA: true
+    OPENCLAW_RELAY_URL: http://10.0.0.3:18795
+    OPENCLAW_HOOK_URL: http://10.0.0.3:18789/hooks/fizzy
 
 #-- General configuration --#
 
-# Use a local registry to deploy
 registry:
-  server: localhost:5555
+  server: ghcr.io
+  username: ThinkOodle
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
-# Handy aliases for interacting with your deployment. For eaxmple: `bin/kamal console` will connect to a
-# Rails console in production.
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
-
-# Use a persistent storage volume for sqlite database files and local Active Storage files.
-# Recommended to change this to a mounted volume path that is backed up off server.
-volumes:
-  - "fizzy_storage:/rails/storage"
-
-# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
-# hitting 404 on in-flight requests. Combines all files from new and old
-# version inside the asset_path.
-asset_path: /rails/public/assets
-
-# Configure the image builder.
-builder:
-  arch: amd64

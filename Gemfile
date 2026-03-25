@@ -64,3 +64,6 @@ group :test do
   gem "vcr"
   gem "mocha"
 end
+
+# Fizzy Agent Orchestrator
+gem "fizzy_agent_orchestrator", github: "ThinkOodle/fizzy-agent-orchestrator", glob: "rails-plugin/*.gemspec"

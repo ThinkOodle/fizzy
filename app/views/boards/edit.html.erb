@@ -35,4 +35,14 @@
     <%= render "boards/edit/publication", board: @board %>
     <%= render "boards/edit/delete", board: @board if Current.user.can_administer_board?(@board) %>
   </div>
+
+  <% if Current.user.can_administer_board?(@board) %>
+    <div class="settings__panel panel shadow">
+      <div class="settings__section">
+        <h3 class="settings__section-title">AI Agent Orchestrator</h3>
+        <p class="settings__section-description">Configure AI agents to automatically work on cards in this board.</p>
+        <%= link_to "Configure Agent Settings", edit_board_agent_config_path(@board), class: "btn" %>
+      </div>
+    </div>
+  <% end %>
 </section>

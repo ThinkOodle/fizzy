@@ -41,6 +41,10 @@ Rails.application.routes.draw do
       resources :columns
     end
 
+    resource :agent_config,
+      only: [ :show, :edit, :update ],
+      controller: "fizzy_agent_orchestrator/board_configs"
+
     resources :cards, only: :create
 
     resources :webhooks do
@@ -53,6 +57,9 @@ Rails.application.routes.draw do
   resources :columns, only: [] do
     resource :left_position, module: :columns
     resource :right_position, module: :columns
+    resource :agent_config,
+      only: [ :show, :edit, :update ],
+      controller: "fizzy_agent_orchestrator/column_configs"
   end
 
   namespace :columns do
@@ -253,8 +260,5 @@ Rails.application.routes.draw do
 
   namespace :admin do
     mount MissionControl::Jobs::Engine, at: "/jobs"
-    # Fizzy Agent Orchestrator
-    require "fizzy_agent_orchestrator"
-    mount FizzyAgentOrchestrator::Engine => "/agent_orchestrator"
   end
 end

@@ -14,3 +14,9 @@
 
   <%= form.submit label, class: "btn btn--link" %>
 <% end %>
+
+<% if !column.new_record? && Current.user.can_administer_board?(board) %>
+  <div style="margin-top: 0.5rem; text-align: center;">
+    <%= link_to "Agent settings", edit_column_agent_config_path(column), class: "btn btn--link txt-small" %>
+  </div>
+<% end %>
